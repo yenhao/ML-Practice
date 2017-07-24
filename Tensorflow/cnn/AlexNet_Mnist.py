@@ -6,7 +6,7 @@ mnist = input_data.read_data_sets("./tmp/data/", one_hot=True)
 
 # Network variables
 learning_rate = 0.001
-training_iters = 200000
+training_iters = 20000
 batch_size = 128
 display_step = 10
 
@@ -93,9 +93,9 @@ def alex_net(x, weights, biases, dropout):
     # Third convention layer
     conv3 = conv2d('conv3', norm2, weights['wc3'], biases['bc3'])
     # Pooling
-    pool3 = maxpool2d('pool3', conv3, k=2)
+    # pool3 = maxpool2d('pool3', conv3, k=2)
     # Normalization
-    norm3 = norm('norm3', pool3, lsize=4)
+    norm3 = norm('norm3', conv3, lsize=4)
 
     # Fourth convention layer
     conv4 = conv2d('conv4', norm3, weights['wc4'], biases['bc4'])
@@ -173,7 +173,6 @@ with tf.Session() as sess:
         sess.run(accuracy, feed_dict={x: mnist.test.images[:256],
                                       y: mnist.test.labels[:256],
                                       keep_prob: 1.})
-
         )
 
 

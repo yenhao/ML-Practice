@@ -48,6 +48,9 @@ y_ = tf.placeholder(tf.float32, [None, 10])
 Define Code
 
 Cross entropy formula as lost function
+
+Not understand:
+reduction_indices=[1]
 """
 cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y), reduction_indices=[1]))
 

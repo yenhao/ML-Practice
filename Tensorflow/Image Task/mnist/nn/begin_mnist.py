@@ -13,6 +13,7 @@ Set the input nodes
 
 Represent this as a 2-D tensor of floating-point numbers, with a shape [None, 784].
 (Here None means that a dimension can be of any length.)
+(None can be the dynamic batch size!)
 
 The input images x will consist of a 2d tensor of floating point numbers.
 Here we assign it a shape of [None, 784], where 784 is the dimensionality of a single flattened 28 by 28 pixel MNIST image,

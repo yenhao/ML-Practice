@@ -59,8 +59,8 @@ def load_data_and_labels(train_data_file, test_data_file, label_hot_dict = {'joy
             continue
         test_text.append(clean_str(sent.split('\t')[0]))
         test_labels.append(label_hot_dict[sent.split('\t')[1]])
-    print('Train_text   : ' + train_text[0])
-    print('Train_labels : ' + train_labels[0])
+    print(train_text[0])
+    print(train_labels[0])
     return [train_text, np.array(train_labels), test_text, np.array(test_labels)]
 
 

@@ -74,18 +74,19 @@ with open(filename, "r") as f:
         # If exist assign vector, else check next word
         if idx != 0:
             initW[idx] = np.array(vec)
+        line = f.readline()
 
 print("Build ")
 W = tf.Variable(tf.constant(0.0,
-                shape=[vocab_size, embedding_dim]), # or tf.random_uniform([vocab_size, embedding_size], -1.0, 1.0),
+                shape=[vocab_size, FLAGS.embedding_dim]), # or tf.random_uniform([vocab_size, embedding_size], -1.0, 1.0),
                 trainable=False, name="W")
 
 sess = tf.Session()
 
 # Way 1
-sess.run(cnn.W.assign(initW))
+sess.run(W.assign(initW))
 
 # Way2
-# embedding_placeholder = tf.placeholder(tf.float32, [vocab_size, embedding_dim])
+# embedding_placeholder = tf.placeholder(tf.float32, [vocab_size, FLAGS.embedding_dim])
 # embedding_init = W.assign(embedding_placeholder)
 # sess.run(embedding_init, feed_dict={embedding_placeholder: embedding})

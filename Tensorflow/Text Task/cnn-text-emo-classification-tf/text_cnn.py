@@ -46,6 +46,7 @@ class TextCNN(object):
                 # Maxpooling over the outputs
                 pooled = tf.nn.max_pool(
                     h,
+                    # ksize=[1, sequence_length - filter_size + 1, 1, 1],
                     ksize=[1, sequence_length - filter_size + 1, 1, 1],
                     strides=[1, 1, 1, 1],
                     padding='VALID',
@@ -54,7 +55,10 @@ class TextCNN(object):
 
         # Combine all the pooled features
         num_filters_total = num_filters * len(filter_sizes)
+        print(num_filters_total)
+        print(pooled_outputs)
         self.h_pool = tf.concat(pooled_outputs, 3)
+        print(self.h_pool)
         self.h_pool_flat = tf.reshape(self.h_pool, [-1, num_filters_total])
 
         # Add dropout

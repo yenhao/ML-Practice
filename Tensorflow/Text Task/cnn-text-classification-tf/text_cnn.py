@@ -23,7 +23,7 @@ class TextCNN(object):
         with tf.device('/cpu:0'), tf.name_scope("embedding"):
             self.W = tf.Variable(
                 tf.random_uniform([vocab_size, embedding_size], -1.0, 1.0),
-                trainable=False, ### Train or Not
+                trainable=True, ### Train or Not
                 name="W")
             self.embedded_chars = tf.nn.embedding_lookup(self.W, self.input_x)
             self.embedded_chars_expanded = tf.expand_dims(self.embedded_chars, -1)
@@ -71,8 +71,9 @@ class TextCNN(object):
             b = tf.Variable(tf.constant(0.1, shape=[num_classes]), name="b")
             l2_loss += tf.nn.l2_loss(W)
             l2_loss += tf.nn.l2_loss(b)
-            self.scores = tf.nn.softmax(tf.nn.xw_plus_b(self.h_drop, W, b, name="scores"), name="softmax")
-            # self.scores = tf.nn.l2_normalize(self.scores, dim = 1, name="l2_norm_output")
+            # self.scores = tf.nn.softmax(tf.nn.xw_plus_b(self.h_drop, W, b, name="scores"), name="softmax")
+            self.scores = tf.nn.xw_plus_b(self.h_drop, W, b, name="scores")
+            self.scores = tf.nn.l2_normalize(self.scores, dim = 1, name="l2_norm_output")
             self.predictions = tf.argmax(self.scores, 1, name="predictions")
 
         # CalculateMean cross-entropy loss

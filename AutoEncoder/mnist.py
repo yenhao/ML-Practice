@@ -33,7 +33,7 @@ class AutoEncoder(object):
     def model(self, n_features, learning_rate, layers):
         """
         Build model with tensorflow
-        :return: model
+        :return: Nothing
         """
         with self.graph.as_default():
             self.X = tf.placeholder(tf.float32, shape=(None, n_features), name="X_Input")
@@ -79,6 +79,17 @@ class AutoEncoder(object):
             self.init_op = tf.global_variables_initializer() # initialization
 
     def fit(self, X, X_valid, X_test=None, epochs = 10, batch_size=32, total_sample=1000):
+        """
+        Starting to training our Auto Encoder
+
+        :param X: training sample [np array]
+        :param X_valid: validation sample [np array]
+        :param X_test: test sample [np array]
+        :param epochs: nums of epochs
+        :param batch_size: nums of batch size
+        :param total_sample: numbers of sample for training samples
+        :return: nothing
+        """
         self.sess.run(self.init_op) # initializing
 
         for epoch in range(epochs):
@@ -102,6 +113,11 @@ class AutoEncoder(object):
 
 
     def predict(self, X):
+        """
+        Test for img to encode and decode
+        :param X: the img matrix to go through encode and decode process
+        :return: encoded code and decode image matrix
+        """
         code, y_pred = self.sess.run([self.code, self.y_], feed_dict={self.X: X})
         return code, y_pred
 
@@ -109,22 +125,33 @@ class AutoEncoder(object):
 if __name__ == '__main__':
     train_data, valid_data, test_data, input_shape, label_shape = load_mnist()
 
-    layer_nodes = [512, 256, 128, 64, 32]
-    # layer_nodes = [515, 512, 509, 506, 503]
-    encode_nodes = 16
+    layer_nodes = [512, 256, 128, 64]
+    encode_nodes = 10
 
-    auto_encoder = AutoEncoder(input_shape, layer_nodes, encode_nodes, learning_rate=0.00013)
+    auto_encoder = AutoEncoder(input_shape, layer_nodes, encode_nodes, learning_rate=0.00017)
 
     auto_encoder.fit(train_data, valid_data, test_data, total_sample=train_data.images.shape[0], epochs= 15)
 
-    for i in range(5):
+    figures = 5
+
+    # set figures
+    fig, axes = plt.subplots(figures, 2, figsize=(4,figures*2), # set size and nums of figures
+                             subplot_kw={'xticks': [], 'yticks': []}) # remove the ticks
+    fig.subplots_adjust(hspace=0.3, wspace=0.05)
+
+    fig.suptitle("MNIST Auto Encoder (Code Size="+str(encode_nodes)+")") # title for whole figure
+
+    for i in range(figures):
         img = np.reshape(test_data.images[i, :], (28, 28)) # re-shape to image like
 
         c, y_pred = auto_encoder.predict(np.reshape(test_data.images[i, :], (1, 28*28)))
         img_pred = np.reshape(y_pred, (28, 28)) # re-shape to image like
 
-        plt.matshow(img, cmap=plt.get_cmap('gray'))
-        plt.matshow(img_pred, cmap=plt.get_cmap('gray'))
+        axes[i][0].set_title("Original {}".format(np.argmax(test_data.labels[i])))
+        axes[i][0].imshow(img, cmap=plt.get_cmap('gray'))
 
+        axes[i][1].set_title("Decoded {}".format(np.argmax(test_data.labels[i])))
+        axes[i][1].imshow(img_pred, cmap=plt.get_cmap('gray'))
+
+    plt.savefig('mnist.png')
     plt.show()
-    plt.close()

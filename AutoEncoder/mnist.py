@@ -132,10 +132,10 @@ if __name__ == '__main__':
 
     auto_encoder.fit(train_data, valid_data, test_data, total_sample=train_data.images.shape[0], epochs= 15)
 
-    figures = 5
+    figures = 10
 
     # set figures
-    fig, axes = plt.subplots(figures, 2, figsize=(4,figures*2), # set size and nums of figures
+    fig, axes = plt.subplots(2, figures, figsize=(figures*2, 3), # set size and nums of figures
                              subplot_kw={'xticks': [], 'yticks': []}) # remove the ticks
     fig.subplots_adjust(hspace=0.3, wspace=0.05)
 
@@ -147,11 +147,9 @@ if __name__ == '__main__':
         c, y_pred = auto_encoder.predict(np.reshape(test_data.images[i, :], (1, 28*28)))
         img_pred = np.reshape(y_pred, (28, 28)) # re-shape to image like
 
-        axes[i][0].set_title("Original {}".format(np.argmax(test_data.labels[i])))
-        axes[i][0].imshow(img, cmap=plt.get_cmap('gray'))
+        axes[0][i].imshow(img, cmap=plt.get_cmap('gray'))
 
-        axes[i][1].set_title("Decoded {}".format(np.argmax(test_data.labels[i])))
-        axes[i][1].imshow(img_pred, cmap=plt.get_cmap('gray'))
+        axes[1][i].imshow(img_pred, cmap=plt.get_cmap('gray'))
 
     plt.savefig('mnist.png')
     plt.show()

@@ -67,7 +67,7 @@ class AutoEncoder(object):
 
             self.y_ = tf.layers.dense(layer_input,
                                   784,
-                                  activation=tf.nn.relu,
+                                  activation=tf.nn.sigmoid,
                                   kernel_initializer=tf.truncated_normal_initializer(stddev=0.01),
                                   name="y_pred")
 

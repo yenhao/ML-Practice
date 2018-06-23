@@ -152,7 +152,7 @@ if __name__ == '__main__':
     train_data, valid_data, test_data, input_shape, label_shape = load_mnist()
 
     layer_nodes = [1024, 512, 256, 64]
-    encode_nodes = 10
+    encode_nodes = 2
 
     auto_encoder = AutoEncoder(input_shape, layer_nodes, encode_nodes, learning_rate=0.00017, alpha=5, scale=0.053)
 
@@ -177,5 +177,5 @@ if __name__ == '__main__':
 
         axes[1][i].imshow(img_pred, cmap=plt.get_cmap('gray'))
 
-    plt.savefig('mnist.png')
+    plt.savefig('res_img/mnist_'+str(encode_nodes)+'.png')
     plt.show()

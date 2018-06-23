@@ -2,4 +2,12 @@
 
 A brief auto encoder implementation for mnist dataset.
 
-![result](https://github.com/yenhao/ML-Practice/blob/master/AutoEncoder/mnist.png)
+2 dimension code
+
+![2 code result](res_img/mnist_2.png)
+
+
+10 dimension code
+
+![10 code result](res_img/mnist_10.png)
+

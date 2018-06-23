@@ -23,10 +23,11 @@ def load_mnist():
     return train_data, valid_data, test_data, input_shape, label_shape
 
 class AutoEncoder(object):
-    def __init__(self, n_features, layers=[], code_nodes=2, learning_rate= 0.013, alpha=0.1):
+    def __init__(self, n_features, layers=[], code_nodes=2, learning_rate= 0.013, alpha=0.1, scale=0.073):
         self.code_nodes = code_nodes
 
-        self.regularizer = tf.contrib.layers.l2_regularizer(scale=alpha)
+        self.regularizer = tf.contrib.layers.l2_regularizer(scale=scale)
+        self.alpha = alpha
 
         self.graph = tf.Graph() # initialize new graph
         self.model(n_features, learning_rate, layers)
@@ -81,7 +82,7 @@ class AutoEncoder(object):
             self.mse_loss = tf.reduce_mean(tf.pow(self.y_ - self.X, 2)) # mean square error
             self.l2_loss = tf.losses.get_regularization_loss() # l2 loss
 
-            self.loss = self.mse_loss + self.l2_loss/(1+self.l2_loss) # final loss
+            self.loss = self.mse_loss + self.alpha * self.l2_loss/(1+self.l2_loss) # final loss
 
             tf.summary.scalar('mse_loss', self.mse_loss)
             tf.summary.scalar('l2_loss', self.l2_loss)
@@ -150,12 +151,12 @@ class AutoEncoder(object):
 if __name__ == '__main__':
     train_data, valid_data, test_data, input_shape, label_shape = load_mnist()
 
-    layer_nodes = [512, 256, 128, 64]
+    layer_nodes = [1024, 512, 256, 64]
     encode_nodes = 10
 
-    auto_encoder = AutoEncoder(input_shape, layer_nodes, encode_nodes, learning_rate=0.00017, alpha=0.01)
+    auto_encoder = AutoEncoder(input_shape, layer_nodes, encode_nodes, learning_rate=0.00017, alpha=5, scale=0.053)
 
-    auto_encoder.fit(train_data, valid_data, test_data, total_sample=train_data.images.shape[0], epochs= 15, batch_size=8)
+    auto_encoder.fit(train_data, valid_data, test_data, total_sample=train_data.images.shape[0], epochs= 20, batch_size=8)
 
     figures = 15
 
